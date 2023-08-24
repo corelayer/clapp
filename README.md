@@ -1,0 +1,2 @@
+# clapp
+CoreLayer Application Base
