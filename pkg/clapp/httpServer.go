@@ -76,7 +76,7 @@ func (s *HttpServer) shutdown(c *context.Context, cancelFunc context.CancelFunc,
 }
 
 func (s *HttpServer) listenAndServe() {
-	slog.Info("Server started on %s\n", s.Addr)
+	slog.Info("server started", "listenAddress", s.Addr)
 	err := s.ListenAndServe()
 	if err != nil && !errors.Is(err, http.ErrServerClosed) {
 		slog.Error("could not start httpServer", "error", err)

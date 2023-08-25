@@ -16,67 +16,103 @@
 
 package clapp
 
-import (
-	"fmt"
-	"log/slog"
-	"strings"
+// import (
+// 	"github.com/spf13/viper"
+// )
+//
+// type Configuration struct {
+// 	*viper.Viper
+// 	filename string
+// 	path     string
+// 	paths    []string
+// 	// autoLoad                   bool
+// 	// replaceHyphenWithCamelCase bool
+// 	// initialized                bool
+// 	// loaded                     bool
+// }
 
-	"github.com/spf13/viper"
-)
-
-type Configuration struct {
-	*viper.Viper
-	filename                   string
-	paths                      []string
-	replaceHyphenWithCamelCase bool
-}
-
-func (c Configuration) initialize() error {
-	c.initConfigDetails()
-	c.initConfigPaths()
-	return c.loadConfig()
-}
-
-func (c Configuration) initConfigDetails() {
-	parts := strings.Split(c.filename, ".")
-	if len(parts) < 2 {
-		parts = append(parts, "yaml")
-	}
-	slog.Debug("setting config file name", "filename", parts[0])
-	c.SetConfigName(parts[0])
-	slog.Debug("setting config file type", "filetype", parts[1])
-	c.SetConfigType(parts[1])
-}
-
-func (c Configuration) initConfigPaths() {
-	for _, path := range c.paths {
-		slog.Debug("adding config search path", "path", path)
-		c.AddConfigPath(path)
-	}
-}
-
-func (c Configuration) loadConfig() error {
-	err := c.ReadInConfig()
-	if err != nil {
-		slog.Debug("error reading config", "error", err)
-		return fmt.Errorf("%w", err)
-	}
-	return nil
-}
-
-func NewConfiguration(filename string, paths []string, replaceHyphenWithCamelCase bool) (*Configuration, error) {
-	c := &Configuration{
-		Viper:                      viper.New(),
-		filename:                   filename,
-		paths:                      paths,
-		replaceHyphenWithCamelCase: replaceHyphenWithCamelCase,
-	}
-
-	err := c.initialize()
-
-	if err != nil {
-		slog.Error("could not initialize configuration", "error", err)
-		return nil, fmt.Errorf("could not initialize configuration: %w", err)
-	}
-	return c, nil
-}
+//	func (c Configuration) FileName() *string {
+//		return &c.filename
+//	}
+//
+//	func (c Configuration) FilePath() *string {
+//		return &c.path
+//	}
+//
+//	func (c Configuration) Initialize() {
+//		c.initConfigDetails()
+//		c.initConfigPaths()
+//
+//		c.initialized = true
+//	}
+//
+//	func (c Configuration) IsInitialized() bool {
+//		return c.initialized
+//	}
+//
+//	func (c Configuration) IsLoaded() bool {
+//		return c.loaded
+//	}
+//
+//	func (c Configuration) Load() error {
+//		if !c.IsInitialized() {
+//			c.Initialize()
+//		}
+//
+//		err := c.viper.ReadInConfig()
+//		if err != nil {
+//			slog.Debug("error reading config", "error", err)
+//			return fmt.Errorf("%w", err)
+//		}
+//		c.loaded = true
+//		return nil
+//	}
+//
+//	func (c Configuration) ReplaceHyphenWithCamelCase() bool {
+//		return c.replaceHyphenWithCamelCase
+//	}
+//
+//	func (c Configuration) Viper() *viper.Viper {
+//		return c.viper
+//	}
+//
+//	func (c Configuration) initConfigDetails() {
+//		parts := strings.Split(c.filename, ".")
+//		if len(parts) < 2 {
+//			parts = append(parts, "yaml")
+//		}
+//		slog.Debug("setting config file name", "filename", parts[0])
+//		c.viper.SetConfigName(parts[0])
+//		slog.Debug("setting config file type", "filetype", parts[1])
+//		c.viper.SetConfigType(parts[1])
+//	}
+//
+//	func (c Configuration) initConfigPaths() {
+//		if c.path != "" {
+//			c.viper.AddConfigPath(c.path)
+//		}
+//
+//		for _, path := range c.paths {
+//			slog.Debug("adding config search path", "path", path)
+//			c.viper.AddConfigPath(path)
+//		}
+//	}
+// func NewConfiguration(filename string, path string, searchPaths []string, autoLoad bool, replaceHyphenWithCamelCase bool) (*Configuration, error) {
+// 	var err error
+// 	c := &Configuration{
+// 		viper:    viper.New(),
+// 		filename: filename,
+// 		path:     path,
+// 		paths:    searchPaths,
+// 		autoLoad: autoLoad,
+// 		// replaceHyphenWithCamelCase: replaceHyphenWithCamelCase,
+// 		// initialized:                false,
+// 		// loaded:                     false,
+// 	}
+//
+// 	if autoLoad {
+// 		err = c.Load()
+// 	}
+//
+// 	return c, err
+// }
