@@ -20,11 +20,11 @@ import "github.com/spf13/cobra"
 
 type Command struct {
 	*cobra.Command
-	subCommands []*Command
+	SubCommands []Commander
 }
 
-func (c *Command) Initialize() *cobra.Command {
-	for _, subCmd := range c.subCommands {
+func (c Command) Initialize() *cobra.Command {
+	for _, subCmd := range c.SubCommands {
 		c.Command.AddCommand(subCmd.Initialize())
 	}
 	return c.Command
