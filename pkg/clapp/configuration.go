@@ -34,12 +34,7 @@ type Configuration struct {
 func (c Configuration) initialize() error {
 	c.initConfigDetails()
 	c.initConfigPaths()
-	err := c.ReadInConfig()
-	if err != nil {
-		slog.Debug("Error reading config from viper", "error", err)
-		return fmt.Errorf("%w", err)
-	}
-	return nil
+	return c.loadConfig()
 }
 
 func (c Configuration) initConfigDetails() {
@@ -47,15 +42,26 @@ func (c Configuration) initConfigDetails() {
 	if len(parts) < 2 {
 		parts = append(parts, "yaml")
 	}
+	slog.Debug("setting config file name", "filename", parts[0])
 	c.SetConfigName(parts[0])
+	slog.Debug("setting config file type", "filetype", parts[1])
 	c.SetConfigType(parts[1])
 }
 
 func (c Configuration) initConfigPaths() {
 	for _, path := range c.paths {
-		slog.Debug("adding path to config", "path", path)
+		slog.Debug("adding config search path", "path", path)
 		c.AddConfigPath(path)
 	}
+}
+
+func (c Configuration) loadConfig() error {
+	err := c.ReadInConfig()
+	if err != nil {
+		slog.Debug("error reading config", "error", err)
+		return fmt.Errorf("%w", err)
+	}
+	return nil
 }
 
 func NewConfiguration(filename string, paths []string, replaceHyphenWithCamelCase bool) (*Configuration, error) {
@@ -67,6 +73,7 @@ func NewConfiguration(filename string, paths []string, replaceHyphenWithCamelCas
 	}
 
 	err := c.initialize()
+
 	if err != nil {
 		slog.Error("could not initialize configuration", "error", err)
 		return nil, fmt.Errorf("could not initialize configuration: %w", err)
