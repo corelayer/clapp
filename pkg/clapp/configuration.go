@@ -34,7 +34,7 @@ type Configuration struct {
 func (c Configuration) initialize() error {
 	c.initConfigDetails()
 	c.initConfigPaths()
-	err := viper.ReadInConfig()
+	err := c.ReadInConfig()
 	if err != nil {
 		slog.Debug("Error reading config from viper", "error", err)
 		return fmt.Errorf("%w", err)
@@ -53,6 +53,7 @@ func (c Configuration) initConfigDetails() {
 
 func (c Configuration) initConfigPaths() {
 	for _, path := range c.paths {
+		slog.Debug("adding path to config", "path", path)
 		c.AddConfigPath(path)
 	}
 }
