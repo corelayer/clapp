@@ -16,7 +16,8 @@
 
 package clapp
 
+import "github.com/spf13/viper"
+
 type Configurator interface {
-	Initialize()
-	IsInitialized() bool
+	GetViper() *viper.Viper
 }

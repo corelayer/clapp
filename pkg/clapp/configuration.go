@@ -27,10 +27,9 @@ type Configuration struct {
 	filename string
 	path     string
 	paths    []string
-	Viper    *viper.Viper
 }
 
-func (c Configuration) initConfigDetails() (string, string) {
+func (c Configuration) getViperConfig() (string, string) {
 	parts := strings.Split(c.filename, ".")
 	if len(parts) < 2 {
 		parts = append(parts, "yaml")
@@ -38,43 +37,34 @@ func (c Configuration) initConfigDetails() (string, string) {
 	return parts[0], parts[1]
 }
 
-func (c Configuration) Initialize() {
-	c.Viper = viper.New()
+func (c Configuration) GetViper() *viper.Viper {
+	v := viper.New()
 
 	if c.path != "" {
 		fullPath := c.path + "/" + c.filename
 		slog.Debug("setting config file", "file", fullPath)
-		c.Viper.SetConfigFile(fullPath)
+		v.SetConfigFile(fullPath)
 	} else {
-		configName, configType := c.initConfigDetails()
+		configName, configType := c.getViperConfig()
 		slog.Debug("setting config name", "name", configName)
-		c.Viper.SetConfigName(configName)
+		v.SetConfigName(configName)
 		slog.Debug("setting config type", "type", configType)
-		c.Viper.SetConfigType(configType)
+		v.SetConfigType(configType)
 
 		for _, path := range c.paths {
 			slog.Debug("adding config search path", "path", path)
-			c.Viper.AddConfigPath(path)
+			v.AddConfigPath(path)
 		}
 	}
+
+	return v
 }
 
-func (c Configuration) IsInitialized() bool {
-	if c.Viper == nil {
-		return false
-	}
-	return true
-}
-
-func NewConfiguration(filename string, path string, searchPaths []string, initialize bool) *Configuration {
-	c := &Configuration{
+func NewConfiguration(filename string, path string, searchPaths []string) Configuration {
+	c := Configuration{
 		filename: filename,
 		path:     path,
 		paths:    searchPaths,
-	}
-
-	if initialize {
-		c.Initialize()
 	}
 
 	return c
