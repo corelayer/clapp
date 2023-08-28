@@ -16,13 +16,7 @@
 
 package clapp
 
-// type Configurator interface {
-// 	Initialize()
-// 	IsInitialized() bool
-// 	IsLoaded() bool
-// 	Load() error
-// 	ReplaceHyphenWithCamelCase() bool
-// 	Viper() *viper.Viper
-// 	FileName() *string
-// 	FilePath() *string
-// }
+type Configurator interface {
+	Initialize()
+	IsInitialized() bool
+}
