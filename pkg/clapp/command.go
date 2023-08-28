@@ -16,7 +16,11 @@
 
 package clapp
 
-import "github.com/spf13/cobra"
+import (
+	"log/slog"
+
+	"github.com/spf13/cobra"
+)
 
 type Command struct {
 	*cobra.Command
@@ -24,6 +28,7 @@ type Command struct {
 }
 
 func (c Command) Initialize() *cobra.Command {
+	slog.Debug("initializing command", "command", c.Name())
 	for _, subCmd := range c.SubCommands {
 		c.Command.AddCommand(subCmd.Initialize())
 	}

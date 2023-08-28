@@ -67,7 +67,7 @@ func (a *Application) RegisterCommands(c []Commander) {
 
 func (a *Application) Run() {
 	if err := a.Execute(); err != nil {
-		slog.Error("Could not start application", "error", err)
+		slog.Error("could not start application", "error", err)
 		os.Exit(1)
 	}
 }
@@ -85,8 +85,8 @@ func NewApplication(use string, short string, long string, version string) *Appl
 		Version: version,
 	}
 
-	rootCmd.Flags().StringVarP(&a.configFileFlag, "file", "f", "config.yaml", "config filename")
-	rootCmd.Flags().StringVarP(&a.configPathFlag, "path", "p", "", "config file path")
+	rootCmd.PersistentFlags().StringVarP(&a.configFileFlag, "file", "f", "config.yaml", "config filename")
+	rootCmd.PersistentFlags().StringVarP(&a.configPathFlag, "path", "p", "", "config file path")
 
 	a.Command = rootCmd
 	return a
