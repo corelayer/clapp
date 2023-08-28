@@ -18,7 +18,6 @@ package clapp
 
 import (
 	"log/slog"
-	"os"
 
 	"github.com/spf13/cobra"
 )
@@ -33,11 +32,12 @@ func (a *Application) RegisterCommands(c []Commander) {
 	}
 }
 
-func (a *Application) Run() {
+func (a *Application) Run() error {
 	if err := a.Command.Execute(); err != nil {
 		slog.Error("could not start application", "error", err)
-		os.Exit(1)
+		return err
 	}
+	return nil
 }
 
 func NewApplication(use string, short string, long string, version string) *Application {
