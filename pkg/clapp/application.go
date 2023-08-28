@@ -24,32 +24,26 @@ import (
 )
 
 type Application struct {
-	*cobra.Command
-	// config Configuration
-
-	configFileFlag string
-	configPathFlag string
+	Command *cobra.Command
 }
 
 func (a *Application) RegisterCommands(c []Commander) {
 	for _, cmdr := range c {
-		a.AddCommand(cmdr.Initialize())
+		a.Command.AddCommand(cmdr.Initialize())
 	}
 }
 
 func (a *Application) Run() {
-	if err := a.Execute(); err != nil {
+	if err := a.Command.Execute(); err != nil {
 		slog.Error("could not start application", "error", err)
 		os.Exit(1)
 	}
 }
 
 func NewApplication(use string, short string, long string, version string) *Application {
-	a := &Application{
-		// config: nil,
-	}
+	a := &Application{}
 
-	rootCmd := &cobra.Command{
+	command := &cobra.Command{
 		Use:     use,
 		Short:   short,
 		Long:    long,
@@ -57,9 +51,6 @@ func NewApplication(use string, short string, long string, version string) *Appl
 		Version: version,
 	}
 
-	rootCmd.PersistentFlags().StringVarP(&a.configFileFlag, "file", "f", "config.yaml", "config file name")
-	rootCmd.PersistentFlags().StringVarP(&a.configPathFlag, "path", "p", "", "config file path")
-
-	a.Command = rootCmd
+	a.Command = command
 	return a
 }

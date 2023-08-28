@@ -23,14 +23,14 @@ import (
 )
 
 type Command struct {
-	*cobra.Command
+	Cobra       *cobra.Command
 	SubCommands []Commander
 }
 
 func (c Command) Initialize() *cobra.Command {
-	slog.Debug("initializing command", "command", c.Name())
+	slog.Debug("initializing command", "command", c.Cobra.Name())
 	for _, subCmd := range c.SubCommands {
-		c.Command.AddCommand(subCmd.Initialize())
+		c.Cobra.AddCommand(subCmd.Initialize())
 	}
-	return c.Command
+	return c.Cobra
 }
