@@ -35,6 +35,7 @@ func (c Configuration) getViperConfig() (string, string) {
 		parts = append(parts, "yaml")
 		slog.Debug("could not split filename, adding yaml", "filename", c.filename, "parts", parts)
 	}
+	slog.Debug("getting config file", "parts", parts)
 	return parts[0], parts[1]
 }
 
