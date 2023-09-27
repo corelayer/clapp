@@ -33,6 +33,7 @@ func (c Configuration) getViperConfig() (string, string) {
 	parts := strings.Split(c.filename, ".")
 	if len(parts) < 2 {
 		parts = append(parts, "yaml")
+		slog.Debug("could not split filename, adding yaml", "filename", c.filename, "parts", parts)
 	}
 	return parts[0], parts[1]
 }
